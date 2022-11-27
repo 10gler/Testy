@@ -1,9 +1,5 @@
 describe("in-memory-tests", () => {
   beforeEach(() => {
-    // Cypress starts out with a blank slate for each test
-    // so we must tell it to visit our website with the `cy.visit()` command.
-    // Since we want to visit the same URL at the start of all our tests,
-    // we include it in our beforeEach function so that it runs before each test
     cy.visit("https://localhost:5001/");
   });
 
@@ -38,12 +34,15 @@ describe("in-memory-tests", () => {
 
   it("remove-game", () => {
     cy.get(
-      '[data-testing="table"] tbody tr:last-child [data-testing="delete-game"] > input[type="submit"]'
-    ).click();
+      '[data-testing="table"] tbody tr:nth-last-child(2) td:first-child'
+    ).then(($last) => {
+      cy.get(
+        '[data-testing="table"] tbody tr:last-child [data-testing="delete-game"] > input[type="submit"]'
+      ).click();
 
-    cy.get('[data-testing="table"] tbody tr:last-child td:first-child').should(
-      "contain.text",
-      "Sequence"
-    );
+      cy.get(
+        '[data-testing="table"] tbody tr:last-child td:first-child'
+      ).should("contain.text", $last.text());
+    });
   });
 });
