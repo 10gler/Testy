@@ -49,7 +49,7 @@
                 @Html.DisplayFor(modelItem => item.IsReleased)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Open</a>
+                <a asp-action="Edit" asp-route-id="@item.ID" data-testing="open-game">Open</a>
                 <form asp-action="Delete">
                     <input type="hidden" value="@item.ID" name="id" />
                     <input type="submit" value="Delete" />
