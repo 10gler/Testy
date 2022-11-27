@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Web.WebPages.Html;
 using EFCoreInMemoryDemo.Web.DataContext;
 using EFCoreInMemoryDemo.Web.Models;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -76,12 +75,10 @@ namespace EFCoreInMemoryDemo.Web.Controllers
             };
             string url = urlBuilder.ToString();
 
-            QRCodeGenerator QrGenerator = new QRCodeGenerator();
-            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
-
-            QRCode QrCode = new QRCode(QrCodeInfo);
-            Bitmap QrBitmap = QrCode.GetGraphic(60);
-            byte[] BitmapArray = QrBitmap.BitmapToByteArray();
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+            PngByteQRCode qrCode = new PngByteQRCode(qrCodeData);
+            byte[] BitmapArray = qrCode.GetGraphic(60);
             string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
             ViewBag.QrCodeUri = QrUri;
 
