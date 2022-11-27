@@ -51,7 +51,7 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID" data-testing="open-game">Open</a>
-                <form asp-action="Delete">
+                <form asp-action="Delete" data-testing="delete-game">
                     <input type="hidden" value="@item.ID" name="id" />
                     <input type="submit" value="Delete" />
                 </form>
