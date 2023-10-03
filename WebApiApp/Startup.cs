@@ -60,6 +60,14 @@ namespace TestAutoryzacji
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+
+            services.AddSwaggerGen(s => s.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+            {
+                Version = "v1",
+                Title = "Demo API",
+                TermsOfService = "None",
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,6 +86,9 @@ namespace TestAutoryzacji
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(s => s.SwaggerEndpoint("/swagger/v1/swagger.json", "API v.1"));
 
             app.UseMvc(routes =>
             {
