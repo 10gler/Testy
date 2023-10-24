@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestAutoryzacji.Models;
 using TestAutoryzacji.Services;
+using WebApiApp.Models;
 
 namespace TestAutoryzacji.Controllers
 {
@@ -23,17 +24,21 @@ namespace TestAutoryzacji.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult<User> Authenticate(User userParam)
+        [ProducesResponseType(typeof(LoggedUser), 200)]
+        [ProducesResponseType(typeof(BadRequestResult), 400)]
+        public ActionResult<LoggedUser> Authenticate(UserCredentials userCredentials)
         {
-            var user = _userService.Authenticate(userParam.Username, userParam.Password);
+            var user = _userService.Authenticate(userCredentials.Username, userCredentials.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest();
 
             return user;
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<User>), 200)]
+        [ProducesResponseType(401)]
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();

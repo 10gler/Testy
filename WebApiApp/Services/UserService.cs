@@ -7,15 +7,17 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TestAutoryzacji.Models;
+using WebApiApp.Dao;
+using WebApiApp.Models;
 
 namespace TestAutoryzacji.Services
 {
     public class UserService : IUserService
     {
-        private List<User> _users = new List<User>
+        private List<UserDao> _users = new List<UserDao>
         {
-            new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" },
-            new User { Id = 2, FirstName = "Test2", LastName = "User2", Username = "test2", Password = "test2" }
+            new UserDao { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" },
+            new UserDao { Id = 2, FirstName = "Test2", LastName = "User2", Username = "test2", Password = "test2" }
         };
         private string _secret;
 
@@ -24,7 +26,7 @@ namespace TestAutoryzacji.Services
             _secret = "0123456789012345678901234567";
         }
 
-        public User Authenticate(string username, string password)
+        public LoggedUser Authenticate(string username, string password)
         {
             var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
@@ -46,21 +48,31 @@ namespace TestAutoryzacji.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+
+            var tokenStr = tokenHandler.WriteToken(token);
 
             // remove password before returning
             user.Password = null;
 
-            return user;
+            return new LoggedUser
+            {
+                Id = user.Id,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Token = tokenStr
+            };
         }
 
         public IEnumerable<User> GetAll()
         {
             // return users without passwords
-            return _users.Select(x =>
+            return _users.Select(x => new User 
             {
-                x.Password = null;
-                return x;
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Username = x.Username
             });
         }
     }
