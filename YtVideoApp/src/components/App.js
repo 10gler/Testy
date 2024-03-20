@@ -3,10 +3,12 @@ import VideoList from './VideoList';
 import { connect } from 'react-redux';
 import { fetchVideos, onSearchTermChanged, setIsFetching } from '../actions';
 import MainVideo from './MainVideo';
+import {HashRouter} from 'react-router-dom'
 
 class App extends Component {
     render() {
         return (
+            <HashRouter>
             <div className="ui container stackable two column grid">
                 <div className="ui row">
                     <div className="column eight wide">
@@ -30,6 +32,7 @@ class App extends Component {
                     </div>
                 </div>
             </div>
+            </HashRouter>
         );
     }
 
