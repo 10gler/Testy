@@ -21,9 +21,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Locate Python test file
-      run: |
-        pwd
-        find . -iname "testy_api.py" -o -iname "*api*.py"
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
