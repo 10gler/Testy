@@ -1,7 +1,7 @@
 ﻿import schemathesis
 
 
-SCHEMA_URL = "http://localhost:5252/swagger/v1/swagger.json"
+SCHEMA_URL = "https://webapifortesting20261019143850-hdg6ajbra0d6g2gk.westeurope-01.azurewebsites.net/swagger/v1/swagger.json"
 schema = schemathesis.openapi.from_url(SCHEMA_URL)
 
 
