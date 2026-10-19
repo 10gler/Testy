@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebForTesting.Services;
@@ -41,6 +42,22 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Niektóre metody HTTP (np. TRACE) s¹ odrzucane przez serwer/Kestrel na wczeœniejszym
+// etapie potoku (zwracaj¹c 400), zanim dojd¹ do routingu MVC. Aby by³y zgodne ze
+// specyfikacj¹ OpenAPI (metoda nieudokumentowana => 405 Method Not Allowed),
+// jawnie przechwytujemy je tutaj.
+app.Use(async (context, next) =>
+{
+    if (HttpMethods.IsTrace(context.Request.Method))
+    {
+        context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
+        context.Response.Headers.Allow = "GET, POST";
+        return;
+    }
+
+    await next();
+});
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
