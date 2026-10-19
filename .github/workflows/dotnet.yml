@@ -35,4 +35,4 @@ jobs:
     - name: Install Python dependencies
       run: python -m pip install pytest schemathesis
     - name: Run Schemathesis tests
-      run: pytest -v WebApiForTesting/testy_api.py
+      run: pytest -v /home/runner/work/Testy/Testy/testy_api.py
